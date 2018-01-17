@@ -1,14 +1,12 @@
 package en.oiseauxpascontents.characters;
 
-import en.oiseauxpascontents.interfaces.IDefender;
-
 /**
  * @author Nicolas Berino - Romain Semler
  * @version 1.0
  *
  * Classe identifiant un personnage défenseur (PIG). 
  */
-public class Pig extends Character implements IDefender {
+public class Pig extends GameCharacter {
 	
 	public Pig() {}
 	

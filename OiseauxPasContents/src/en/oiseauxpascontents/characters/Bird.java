@@ -1,14 +1,12 @@
 package en.oiseauxpascontents.characters;
 
-import en.oiseauxpascontents.interfaces.IAttacker;
-
 /**
  * @author Nicolas Berino - Romain Semler
  * @version 1.0
  *
  * Classe identifiant un personnage attaquant (BIRD). 
  */
-public class Bird extends Character implements IAttacker {
+public class Bird extends GameCharacter {
 	
 	public Bird() {}
 	

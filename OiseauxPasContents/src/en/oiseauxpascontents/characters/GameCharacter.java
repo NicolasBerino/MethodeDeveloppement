@@ -6,7 +6,7 @@ package en.oiseauxpascontents.characters;
  *
  * Classe identifiant un personnage de l'application. 
  */
-public class Character implements Cloneable {
+public abstract class GameCharacter implements Cloneable {
 
 	private double posX, posY;
 	private double velocityX, velocityY;
@@ -14,9 +14,9 @@ public class Character implements Cloneable {
 	
 	//TODO : ajouter type image
 	
-	public Character() {}
+	public GameCharacter() {}
 	
-	public Character(double posX, double posY) {
+	public GameCharacter(double posX, double posY) {
 		super();
 		this.posX = posX;
 		this.posY = posY;
@@ -24,23 +24,23 @@ public class Character implements Cloneable {
 		velocityY = 0;
 	}
 	
-	public Character clone() throws CloneNotSupportedException{
-        return (Character) super.clone();
+	public GameCharacter clone() throws CloneNotSupportedException{
+        return (GameCharacter) super.clone();
     }
 
-	double getPositionX(){
+	public double getPositionX(){
 		return this.posX;
 	}
 	
-	void setPositionX(double X) {
+	public void setPositionX(double X) {
 		this.posX = X;
 	}
 	
-	double getPositionY(){
+	public double getPositionY(){
 		return this.posY;
 	}
 	
-	void setPositionY(double Y) {
+	public void setPositionY(double Y) {
 		this.posY = Y;
 	}
 	
