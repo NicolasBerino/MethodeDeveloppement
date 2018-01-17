@@ -1,5 +1,7 @@
 package en.oiseauxpascontents.characters;
 
+import java.awt.Image;
+
 /**
  * @author Nicolas Berino - Romain Semler
  * @version 1.0
@@ -10,10 +12,18 @@ public abstract class GameCharacter implements Cloneable {
 
 	private double posX, posY;
 	private double velocityX, velocityY;
-	private String color;
+	private Image image;
 	
 	//TODO : ajouter type image
 	
+	public Image getImage() {
+		return image;
+	}
+
+	public void setImage(Image image) {
+		this.image = image;
+	}
+
 	public GameCharacter() {}
 	
 	public GameCharacter(double posX, double posY) {
@@ -60,11 +70,5 @@ public abstract class GameCharacter implements Cloneable {
 		this.velocityY = velocityY;
 	}
 	
-	String getColor(){
-		return color;
-	}
-	
-	void setColor(String color){
-		this.color=color;
-	}
+	public abstract void getCollision(GameCharacter gC);
 }

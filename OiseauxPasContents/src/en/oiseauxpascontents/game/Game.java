@@ -9,11 +9,15 @@ import java.awt.Image;
 import java.awt.Panel;
 import java.util.*;
 
+import javax.imageio.ImageIO;
+
 import en.oiseauxpascontents.characters.Bird;
 import en.oiseauxpascontents.characters.GameCharacter;
 import en.oiseauxpascontents.characters.Pig;
 
 import java.awt.event.*;
+import java.io.File;
+import java.io.IOException;
 
 public class Game extends Panel implements Runnable, MouseListener, MouseMotionListener{
 
@@ -24,19 +28,20 @@ public class Game extends Panel implements Runnable, MouseListener, MouseMotionL
     private boolean selecting;                          // vrai lorsque le joueur sélectionne l'angle et la vitesse
     Image buffer;                               // image pour le rendu hors écran
     
+    CollisionManager cM = CollisionManager.getInstance();
     boolean tryOver;
     
     Level l;
-    ArrayList<GameCharacter> Birds;
-    ArrayList<GameCharacter> Pigs;
-    GameCharacter CurrentBird;
-    GameCharacter CurrentPig;
+    ArrayList<Bird> Birds;
+    ArrayList<Pig> Pigs;
+    Bird CurrentBird;
+    Pig CurrentPig;
     
     int nombreEssai;
     int nombreCible;
     
     // constructeur
-    Game() throws CloneNotSupportedException {
+    Game() throws CloneNotSupportedException, IOException {
         score = 0;
         addMouseListener(this);
         addMouseMotionListener(this);
@@ -44,12 +49,7 @@ public class Game extends Panel implements Runnable, MouseListener, MouseMotionL
         new Thread(this).start();
     }
     
-    // calcule la distance entre deux points
-    static double distance(double x1, double y1, double x2, double y2) {
-        double dx = x1 - x2;
-        double dy = y1 - y2;
-        return Math.sqrt(dx * dx + dy * dy);
-    }
+
     
  // gestion des événements souris
     public void mouseClicked(MouseEvent e) { }
@@ -61,6 +61,9 @@ public class Game extends Panel implements Runnable, MouseListener, MouseMotionL
             try {
 				initLevel();
 			} catch (CloneNotSupportedException e1) {
+				e1.printStackTrace();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
         } else if(selecting) {
@@ -82,7 +85,7 @@ public class Game extends Panel implements Runnable, MouseListener, MouseMotionL
     }
     
     // début de partie
-    void initLevel() throws CloneNotSupportedException {
+    void initLevel() throws CloneNotSupportedException, IOException {
     	nombreEssai = 2;
     	nombreCible = 2;
     	l = new Level(0.1,nombreEssai,nombreCible,"");
@@ -90,12 +93,17 @@ public class Game extends Panel implements Runnable, MouseListener, MouseMotionL
     	Pigs = l.getPigs();
     	CurrentBird = Birds.get(0);
     	CurrentPig = Pigs.get(0);
+    	CurrentBird.setImage(ImageIO.read(new File("images/bird.png")));
+    	CurrentPig.setImage(ImageIO.read(new File("images/pig.png")));
+    	
+    	cM.ClearObservableChar();
+    	cM.AddObservableChar((Bird)CurrentBird);
+    	cM.AddObservableChar((Pig)CurrentPig);
     	
     	initTry();
     }
     
     void initTry(){
-    	nombreEssai --;
     	tryOver = false;
         gameOver = false;
         selecting = true;
@@ -117,6 +125,7 @@ public class Game extends Panel implements Runnable, MouseListener, MouseMotionL
     }
     // boucle qui calcule la position de l'oiseau en vol, effectue l'affichage et teste les conditions de victoire
 	public void run() {
+		int resultat;
         while(true) {
             // un pas de simulation toutes les 10ms
             try { Thread.currentThread();
@@ -129,8 +138,9 @@ public class Game extends Panel implements Runnable, MouseListener, MouseMotionL
             	CurrentBird.setPositionY(CurrentBird.getPositionY()+CurrentBird.getVelocityY());
             	CurrentBird.setVelocityY(CurrentBird.getVelocityY()+l.getGravity());
             	
+            	resultat =  cM.checkCollision();
                 // conditions de victoire
-                if(distance(CurrentBird.getPositionX(), CurrentBird.getPositionY(), CurrentPig.getPositionX(), CurrentPig.getPositionY()) < 35) {
+                if(resultat == 0) {
                     stop();
                     score++;
                     nombreCible --;
@@ -138,7 +148,11 @@ public class Game extends Panel implements Runnable, MouseListener, MouseMotionL
                     if(nombreCible ==0){
                     	message = "Gagné : cliquez pour recommencer.";
                     }
-                } else if(CurrentBird.getPositionX() < 20 || CurrentBird.getPositionX() > 780 ||CurrentBird.getPositionY() < 0 || CurrentBird.getPositionY() > 480) {
+                    else{
+                    	message = "Plus que " + nombreCible +" cibles.";
+                    }
+                } else if(resultat ==1) {
+                	nombreEssai--;
                     if(nombreEssai == 0 && nombreCible >0){
 	                	stop();
 	                    message = "Perdu : cliquez pour recommencer.";
@@ -176,14 +190,16 @@ public class Game extends Panel implements Runnable, MouseListener, MouseMotionL
         g.drawLine(0, 500, 800, 500);
         g.drawLine(100, 500, 100, 400);
 
+        
         // oiseau
         g.setColor(Color.RED);
-        if(selecting) g.drawLine((int) CurrentBird.getPositionX(), (int) CurrentBird.getPositionY(), mouseX, mouseY); // montre l'angle et la vitesse
-        g.fillOval((int) CurrentBird.getPositionX() - 20, (int) CurrentBird.getPositionY() - 20, 40, 40);
+        if(selecting) g.drawLine((int) CurrentBird.getPositionX(), (int) CurrentBird.getPositionY()+20, mouseX, mouseY); // montre l'angle et la vitesse
+
+        g.drawImage(CurrentBird.getImage(), (int) CurrentBird.getPositionX()-20, (int) CurrentBird.getPositionY()-20, this);
 
         // cochon
-        g.setColor(Color.GREEN);
-        g.fillOval((int) CurrentPig.getPositionX() - 20, (int) CurrentPig.getPositionY() - 20, 40, 40);
+        g.drawImage(CurrentPig.getImage(), (int) CurrentPig.getPositionX() - 20, (int) CurrentPig.getPositionY() - 20, this);
+       // g.fillOval(, (int) CurrentPig.getPositionY() - 20, 40, 40);
 
         // messages
         g.setColor(Color.BLACK);
@@ -200,7 +216,7 @@ public class Game extends Panel implements Runnable, MouseListener, MouseMotionL
     }
 
     // met le jeu dans une fenêtre
-    public static void main(String args[]) throws CloneNotSupportedException {
+    public static void main(String args[]) throws CloneNotSupportedException, IOException {
         Frame frame = new Frame("Oiseau pas content");
         final Game obj = new Game();
         frame.addWindowListener(new WindowAdapter() {

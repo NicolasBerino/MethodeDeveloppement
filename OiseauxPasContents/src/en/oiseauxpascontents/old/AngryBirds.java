@@ -78,7 +78,6 @@ public class AngryBirds extends Panel implements Runnable, MouseListener, MouseM
     }
 
     // boucle qui calcule la position de l'oiseau en vol, effectue l'affichage et teste les conditions de victoire
-    @SuppressWarnings("static-access")
 	public void run() {
         while(true) {
             // un pas de simulation toutes les 10ms
