@@ -1,7 +1,6 @@
 package en.oiseauxpascontents.characters;
 
 import java.awt.Image;
-import java.awt.Toolkit;
 import java.io.File;
 import java.io.IOException;
 
@@ -11,7 +10,7 @@ import javax.imageio.ImageIO;
  * @author Nicolas Berino - Romain Semler
  * @version 1.0
  *
- * Classe identifiant un personnage défenseur (PIG). 
+ * Classe identifiant un personnage "cochon" (PIG). 
  */
 public class Pig extends GameCharacter {
 	
@@ -28,8 +27,10 @@ public class Pig extends GameCharacter {
 
 	@Override
 	public void getCollision(GameCharacter gC) {
+		
 		if(gC instanceof Bird){
 			
+			System.out.println("Collision entre cochon et oiseau.");
 		}
 		
 	}

@@ -1,0 +1,44 @@
+package en.oiseauxpascontents.gui;
+
+import java.awt.Dimension;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
+/**
+ * @author Nicolas Berino - Romain Semler
+ * @version 1.0
+ *
+ * Classe <<singleton>> de la fenêtre principale. 
+ */
+public class MainFrame extends JFrame {
+
+	private static final long serialVersionUID = 1L;
+	private static MainFrame instance =	null;
+	
+	private MainFrame() {}
+	
+	public static MainFrame getInstance(){
+		
+		if (instance == null) {
+			
+			instance = new MainFrame();
+		}
+		
+		return instance;
+	}
+	
+	public void buildFrame(String title, JPanel panel, Dimension dimensions) {
+
+		this.setTitle(title);
+		this.setResizable(false);
+        if (dimensions != null)
+			this.setSize(dimensions);
+        else
+        	this.pack();
+        this.setContentPane(panel);
+		this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setVisible(true);
+	}
+}
