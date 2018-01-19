@@ -14,7 +14,10 @@ import javax.imageio.ImageIO;
  */
 public class Pig extends GameCharacter {
 	
-	public Pig() {}
+	boolean beaten = false;
+	
+	public Pig() {
+	}
 	
 	public Pig(double posX, double posY) throws IOException{
 		
@@ -27,12 +30,36 @@ public class Pig extends GameCharacter {
 
 	@Override
 	public void getCollision(GameCharacter gC) {
-		
+		beaten = true;
 		if(gC instanceof Bird){
-			
+			try {
+				this.setImage(ImageIO.read(new File("images/pigBeaten.png")));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			System.out.println("Collision entre cochon et oiseau.");
 		}
-		
+	}
+	
+	public boolean isBeaten() {
+		return beaten;
+	}
+
+	public void setBeaten(boolean beaten) {
+		this.beaten = beaten;
+	}
+
+	public void firstState() throws IOException{
+		if (!beaten){
+			this.setImage(ImageIO.read(new File("images/pig.png")));
+		}
+	}
+	
+	public void birdThrowed() throws IOException{
+		if(!beaten){
+			this.setImage(ImageIO.read(new File("images/pig2.png")));
+		}
 	}
 	
 }

@@ -1,6 +1,7 @@
 package en.oiseauxpascontents.characters;
 
 import java.awt.Image;
+import java.io.IOException;
 
 /**
  * @author Nicolas Berino - Romain Semler

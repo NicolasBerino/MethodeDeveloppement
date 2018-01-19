@@ -28,7 +28,8 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
 	
 	private int mouseX, mouseY;                 // Position de la souris lors de la sélection
 	private int tryNumber, targetsNumber;		// Nombre d'essais et nombre de cibles
-    private int score;                          // Nombre de fois où le joueur a gagné
+    private int initialTryNumber, initialTargetsNumber; //Nombres d'essais et de cibles initials pour le niveau
+	private int score;                          // Nombre de fois où le joueur a gagné
     
     private boolean gameOver;                   // Vrai lorsque le joueur a touché un bord ou le cochon
     private boolean selecting;                  // Vrai lorsque le joueur sélectionne l'angle et la vitesse
@@ -44,7 +45,8 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
     private Level level;						// Niveau à paramétrer
     
     private Bird currentBird;					
-    private Pig currentPig;
+   
+    
     
     private CollisionManager collisionManager = CollisionManager.getInstance();
 
@@ -84,7 +86,12 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
             
         } else if(tryOver){
         	
-        	initTry();
+        	try {
+				initTry();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
         }
     	
         repaint();
@@ -104,28 +111,68 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
     
     // début de partie
     void initLevel() throws CloneNotSupportedException, IOException {
-    	
-    	this.tryNumber = 2;
-    	this.targetsNumber = 2;
+    	this.initialTargetsNumber=5;
+    	this.initialTryNumber=5;
+    	this.tryNumber = this.initialTryNumber;
+    	this.targetsNumber = this.initialTargetsNumber;
     	
     	this.level = new Level(0.1, this.tryNumber, this.targetsNumber, "");
     	
     	this.birds = this.level.getBirds();
     	this.pigs = this.level.getPigs();
     	
-    	this.currentBird = this.birds.get(0);
-    	this.currentPig = this.pigs.get(0);
-    	this.currentBird.setImage(ImageIO.read(new File("images/bird.png")));
-    	this.currentPig.setImage(ImageIO.read(new File("images/pig.png")));
     	
-    	this.collisionManager.clearObservableCharacter();
-    	this.collisionManager.addObservableCharacter((Bird) this.currentBird);
-    	this.collisionManager.addObservableCharacter((Pig) this.currentPig);
     	
+    	Iterator<Pig> ITpig = pigs.iterator();
+    	while(ITpig.hasNext()){
+    		ITpig.next().setImage(ImageIO.read(new File("images/pig.png")));
+    	}
+    	
+    	ITpig = pigs.iterator();
+    	double newPosition = Math.random() * 500 + 200;
+    	while(ITpig.hasNext()){
+    		Pig p = ITpig.next();
+    		while(!freePosition(newPosition)){
+    			newPosition = Math.random() * 500 + 200;
+    		}
+    		p.setPositionX(newPosition);// position aléatoire pour le cochon
+    		p.setPositionY(480);
+    	
+    	}
     	initTry();
     }
     
-    void initTry() {
+    boolean freePosition(double position){
+    	Iterator<Pig> ITpig2 = pigs.iterator();
+    	while(ITpig2.hasNext()){
+    		if(Math.abs(position - ITpig2.next().getPositionX())<40) 
+    			return false;
+    	}
+    	return true;
+    }
+    
+    void initTry() throws IOException {
+    	this.tryNumber--;
+    	System.out.println(this.initialTargetsNumber + " " + this.tryNumber);
+    	this.currentBird = this.birds.get(this.initialTryNumber-this.tryNumber -1);
+    	
+    	this.currentBird.setImage(ImageIO.read(new File("images/bird.png")));
+
+    	Iterator<Pig> ITpig = pigs.iterator();
+    	while(ITpig.hasNext()){
+    		Pig p = ITpig.next();
+    		p.firstState();
+    		if(p.isBeaten()) ITpig.remove();
+    	}
+    	
+    	this.collisionManager.clearObservableCharacter();
+    	
+
+    	ITpig = pigs.iterator();
+    	while(ITpig.hasNext()){
+    		this.collisionManager.addObservableCharacter((Pig) ITpig.next()); 
+    	}
+    	this.collisionManager.addObservableCharacter((Bird) this.currentBird);
     	
     	this.tryOver = false;
     	this.gameOver = false;
@@ -135,8 +182,9 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
     	this.currentBird.setPositionY(400);
     	this.currentBird.setVelocityX(0);
     	this.currentBird.setVelocityY(0);
-    	this.currentPig.setPositionX(Math.random() * 500 + 200);// position aléatoire pour le cochon
-    	this.currentPig.setPositionY(480);
+    	
+
+
     	
     	this.message = "Choisissez l'angle et la vitesse.";
     }
@@ -167,42 +215,57 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
 
             if(!this.tryOver && !this.selecting) {
 
+            	Iterator<Pig> ITpig = pigs.iterator();
+            	while(ITpig.hasNext()){
+            		try {
+    					ITpig.next().birdThrowed();;
+    				} catch (IOException e) {
+    					// TODO Auto-generated catch block
+    					e.printStackTrace();
+    				} 
+            	}
+            	
+            	
+            	
                 // moteur physique
             	this.currentBird.setPositionX(this.currentBird.getPositionX()+this.currentBird.getVelocityX());
             	this.currentBird.setPositionY(this.currentBird.getPositionY()+this.currentBird.getVelocityY());
             	this.currentBird.setVelocityY(this.currentBird.getVelocityY()+this.level.getGravity());
             	
             	resultat = this.collisionManager.checkCollision();
+				
             	
                 // conditions de victoire
                 if(resultat == 0) {
-                	
                     stop();
                     this.score++;
-                    this.tryNumber--;
                     
+                    targetsNumber--;
+                    System.out.println(this.targetsNumber);
                     if(this.targetsNumber == 0){
-                    	
                     	this.message = "Gagné : cliquez pour recommencer.";
+                    	gameOver=true;
                     	
                     } else{
-                    	
                     	this.message = "Plus que " + this.targetsNumber +" cibles.";
+                    	tryOver=true;
                     }
                     
                 } else if(resultat == 1) {
                 	
-                	this.tryNumber--;
+                	
                 	
                     if(this.tryNumber == 0 && this.targetsNumber > 0) {
                     	
 	                	stop();
 	                    this.message = "Perdu : cliquez pour recommencer.";
+	                    gameOver=true;
 	                    
                     } else {
                     	
 	                	stop();
-	                    this.message = "Plus que " + this.targetsNumber +" essais.";
+	                    this.message = "Plus que " + this.tryNumber +" essais.";
+	                    tryOver=true;
 	                }
                 }
 
@@ -214,14 +277,11 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
 
     // évite les scintillements
     public void update(Graphics g) {
-    	
         paint(g);
     }
-
-
+    
     // dessine le contenu de l'écran dans un buffer puis copie le buffer à l'écran
     public void paint(Graphics g2) {
-    	
         if(buffer == null) buffer = createImage(800, 600);
         Graphics2D g = (Graphics2D) buffer.getGraphics();
 
@@ -242,7 +302,12 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
         g.drawImage(currentBird.getImage(), (int) currentBird.getPositionX()-20, (int) currentBird.getPositionY()-20, this);
 
         // cochon
-        g.drawImage(currentPig.getImage(), (int) currentPig.getPositionX() - 20, (int) currentPig.getPositionY() - 20, this);
+    	Iterator<Pig> ITpig = pigs.iterator();
+    	while(ITpig.hasNext()){
+    		Pig p = ITpig.next();
+    		g.drawImage(p.getImage(), (int) p.getPositionX() , (int) p.getPositionY() -20, this);
+		}
+        
         // g.fillOval(, (int) currentPig.getPositionY() - 20, 40, 40);
 
         // messages

@@ -1,5 +1,6 @@
 package en.oiseauxpascontents.game;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -56,7 +57,6 @@ public class CollisionManager {
 					break;
 				
 				if(distance(gc1.getPositionX(), gc1.getPositionY(), gc2.getPositionX(), gc2.getPositionY()) < 35) {
-					
 					gc1.getCollision(gc2);
 					gc2.getCollision(gc1);
 					return 0;
