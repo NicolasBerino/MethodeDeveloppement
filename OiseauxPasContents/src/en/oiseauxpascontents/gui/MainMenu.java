@@ -1,6 +1,5 @@
 package en.oiseauxpascontents.gui;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -9,14 +8,13 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-import en.oiseauxpascontents.game.Game;
+import en.oiseauxpascontents.characters.CharacterConstants;
 
 /**
  * @author Nicolas Berino - Romain Semler
@@ -38,7 +36,7 @@ public class MainMenu extends JPanel implements IPanel, ActionListener {
 	private Font title2 = new Font("Arial", Font.BOLD, 15);
 	private Font buttonFont = new Font("Futura", Font.BOLD, 15);
 	
-	private Image background = Toolkit.getDefaultToolkit().getImage("images/background-menu.png");
+	private Image background = Toolkit.getDefaultToolkit().getImage(CharacterConstants.MENU_IMAGE);
 	
 	public MainMenu() {
 		
@@ -61,9 +59,6 @@ public class MainMenu extends JPanel implements IPanel, ActionListener {
 		this.playButton.setFont(buttonFont);
 		this.quitButton.setFont(buttonFont);
 		
-		/*this.playButton.setForeground(Color.BLUE);
-		this.quitButton.setForeground(Color.BLUE);*/
-		
 		this.playButton.setOpaque(false);
 		this.quitButton.setOpaque(false);
 		
@@ -85,11 +80,8 @@ public class MainMenu extends JPanel implements IPanel, ActionListener {
 	public void actionPerformed(ActionEvent arg0) {
     	
     	if(arg0.getSource() == playButton)
-			try {
-				MainFrame.getInstance().buildFrame("Détruisez les cochons !", new Game(), new Dimension(800, 600));
-			} catch (CloneNotSupportedException | IOException e) {
-				e.printStackTrace();
-			}
+			MainFrame.getInstance().buildFrame("Personnalisez votre niveau !", new LevelFrame(), new Dimension(400, 300));
+    	
     	if(arg0.getSource() == quitButton)
     		System.exit(0);
     }

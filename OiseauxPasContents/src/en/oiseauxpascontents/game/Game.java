@@ -1,6 +1,8 @@
 package en.oiseauxpascontents.game;
 
 import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -10,6 +12,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 import en.oiseauxpascontents.characters.Bird;
+import en.oiseauxpascontents.characters.CharacterConstants;
 import en.oiseauxpascontents.characters.Pig;
 
 import java.awt.event.*;
@@ -18,17 +21,20 @@ import java.io.IOException;
 
 /**
  * @author Nicolas Berino - Romain Semler
- * @version 1.0
+ * @version 1.3
  *
  * Panel de gestion du jeu.
  */
-public class Game extends JPanel implements Runnable, MouseListener, MouseMotionListener{
+public class Game extends JPanel implements Runnable, MouseListener, MouseMotionListener {
 
 	private static final long serialVersionUID = 1L;
 	
 	private int mouseX, mouseY;                 // Position de la souris lors de la sélection
 	private int tryNumber, targetsNumber;		// Nombre d'essais et nombre de cibles
-    private int initialTryNumber, initialTargetsNumber; //Nombres d'essais et de cibles initials pour le niveau
+	private int initialTryNumber;				// Nombre initial d'essais.
+	private int initialTargetNumber;			// Nombre initial de cibles.
+	private int blackHolesNumber;				// Nombre de trous noirs
+	private double gravity;						// Gravité
 	private int score;                          // Nombre de fois où le joueur a gagné
     
     private boolean gameOver;                   // Vrai lorsque le joueur a touché un bord ou le cochon
@@ -46,16 +52,23 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
     
     private Bird currentBird;					
    
-    
+    private Image background = ImageIO.read(new File(CharacterConstants.BACKGROUND));
     
     private CollisionManager collisionManager = CollisionManager.getInstance();
 
-    public Game() throws CloneNotSupportedException, IOException {
+    public Game(int nbBirds, int nbPigs, int nbBlackHoles, double gravity) throws CloneNotSupportedException, IOException {
     	
         this.score = 0;
+        this.initialTryNumber = nbBirds;
+    	this.initialTargetNumber = nbPigs;
+    	this.blackHolesNumber = nbBlackHoles;
+    	this.gravity = gravity;
+    	
         addMouseListener(this);
         addMouseMotionListener(this);
+        
         initLevel();
+        
         new Thread(this).start();
     }
  
@@ -73,7 +86,6 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
 			} catch (CloneNotSupportedException e1) {
 				e1.printStackTrace();
 			} catch (IOException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
     		
@@ -81,15 +93,17 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
             
         	this.currentBird.setVelocityX((currentBird.getPositionX() - mouseX) / 20.0);
             this.currentBird.setVelocityY((currentBird.getPositionY() - mouseY) / 20.0);
-            this.message = "L'oiseau prend sont envol";
+            this.message = "A l'attaque !";
             this.selecting = false;
             
         } else if(tryOver){
         	
         	try {
+        		
 				initTry();
+				
 			} catch (IOException e1) {
-				// TODO Auto-generated catch block
+
 				e1.printStackTrace();
 			}
         }
@@ -109,57 +123,87 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
         repaint();
     }
     
-    // début de partie
+    /**
+     * Initialisation du niveau du jeu.
+     * 
+     * @throws CloneNotSupportedException
+     * @throws IOException
+     */
     void initLevel() throws CloneNotSupportedException, IOException {
-    	this.initialTargetsNumber=5;
-    	this.initialTryNumber=5;
-    	this.tryNumber = this.initialTryNumber;
-    	this.targetsNumber = this.initialTargetsNumber;
     	
-    	this.level = new Level(0.1, this.tryNumber, this.targetsNumber, "");
+    	this.tryNumber = this.initialTryNumber;
+    	this.targetsNumber = this.initialTargetNumber;
+    	this.score = 0;
+    	
+    	this.level = new Level(this.tryNumber, this.targetsNumber, this.blackHolesNumber, this.gravity);
     	
     	this.birds = this.level.getBirds();
     	this.pigs = this.level.getPigs();
     	
-    	
-    	
     	Iterator<Pig> ITpig = pigs.iterator();
-    	while(ITpig.hasNext()){
-    		ITpig.next().setImage(ImageIO.read(new File("images/pig.png")));
+    	
+    	while(ITpig.hasNext()) {
+    		
+    		ITpig.next().setImage(ImageIO.read(new File(CharacterConstants.PIG_IMAGE)));
     	}
     	
     	ITpig = pigs.iterator();
     	double newPosition = Math.random() * 500 + 200;
-    	while(ITpig.hasNext()){
+    	
+    	while(ITpig.hasNext()) {
+    		
     		Pig p = ITpig.next();
-    		while(!freePosition(newPosition)){
+    		
+    		while(!freePosition(newPosition)) {
+    			
     			newPosition = Math.random() * 500 + 200;
     		}
+    		
     		p.setPositionX(newPosition);// position aléatoire pour le cochon
     		p.setPositionY(480);
     	
     	}
+    	
     	initTry();
     }
     
-    boolean freePosition(double position){
+    /**
+     * Vérifie si une position est libre.
+     * 
+     * @param position
+     * 		La position courante.
+     * 
+     * @return true si la position est libre.
+     */
+    boolean freePosition(double position) {
+    	
     	Iterator<Pig> ITpig2 = pigs.iterator();
-    	while(ITpig2.hasNext()){
-    		if(Math.abs(position - ITpig2.next().getPositionX())<40) 
+    	
+    	while(ITpig2.hasNext()) {
+    		
+    		if(Math.abs(position - ITpig2.next().getPositionX()) < 40) 
     			return false;
     	}
+    	
     	return true;
     }
     
+    /**
+     * Initialisation d'un essai (d'un lancé).
+     * 
+     * @throws IOException
+     */
     void initTry() throws IOException {
-    	this.tryNumber--;
-    	System.out.println(this.initialTargetsNumber + " " + this.tryNumber);
-    	this.currentBird = this.birds.get(this.initialTryNumber-this.tryNumber -1);
     	
-    	this.currentBird.setImage(ImageIO.read(new File("images/bird.png")));
+    	this.tryNumber--;
+    	this.currentBird = this.birds.get(this.initialTryNumber - this.tryNumber - 1);
+    	
+    	this.currentBird.setImage(ImageIO.read(new File(CharacterConstants.BIRD_IMAGE)));
 
     	Iterator<Pig> ITpig = pigs.iterator();
-    	while(ITpig.hasNext()){
+    	
+    	while(ITpig.hasNext()) {
+    		
     		Pig p = ITpig.next();
     		p.firstState();
     		if(p.isBeaten()) ITpig.remove();
@@ -169,27 +213,29 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
     	
 
     	ITpig = pigs.iterator();
-    	while(ITpig.hasNext()){
+    	
+    	while(ITpig.hasNext()) {
+    		
     		this.collisionManager.addObservableCharacter((Pig) ITpig.next()); 
     	}
+    	
     	this.collisionManager.addObservableCharacter((Bird) this.currentBird);
     	
     	this.tryOver = false;
     	this.gameOver = false;
     	this.selecting = true;
     	
-    	this.currentBird.setPositionX(100);
-    	this.currentBird.setPositionY(400);
+    	this.currentBird.setPositionX(95);
+    	this.currentBird.setPositionY(430);
     	this.currentBird.setVelocityX(0);
     	this.currentBird.setVelocityY(0);
-    	
-
-
     	
     	this.message = "Choisissez l'angle et la vitesse.";
     }
     
-    // fin de partie
+    /**
+     * Finalise un essai ou la partie.
+     */
     void stop() {
     	
     	this.tryOver = true;
@@ -200,7 +246,10 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
     		this.gameOver = true;
     }
     
-    // boucle qui calcule la position de l'oiseau en vol, effectue l'affichage et teste les conditions de victoire
+    /**
+     * Calcule la position de l'oiseau en vol, 
+     * effectue l'affichage et teste les conditions de victoire.
+     */
 	public void run() {
 		
 		int resultat;
@@ -214,58 +263,70 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
             } catch(InterruptedException e) { }
 
             if(!this.tryOver && !this.selecting) {
-
+            	
             	Iterator<Pig> ITpig = pigs.iterator();
-            	while(ITpig.hasNext()){
+            	
+            	while(ITpig.hasNext()) {
+            		
             		try {
-    					ITpig.next().birdThrowed();;
+            			
+    					ITpig.next().secondState();
+    					
     				} catch (IOException e) {
-    					// TODO Auto-generated catch block
+
     					e.printStackTrace();
     				} 
             	}
             	
-            	
-            	
                 // moteur physique
-            	this.currentBird.setPositionX(this.currentBird.getPositionX()+this.currentBird.getVelocityX());
-            	this.currentBird.setPositionY(this.currentBird.getPositionY()+this.currentBird.getVelocityY());
-            	this.currentBird.setVelocityY(this.currentBird.getVelocityY()+this.level.getGravity());
+            	this.currentBird.setPositionX(this.currentBird.getPositionX() + this.currentBird.getVelocityX());
+            	this.currentBird.setPositionY(this.currentBird.getPositionY() + this.currentBird.getVelocityY());
+            	this.currentBird.setVelocityY(this.currentBird.getVelocityY() + this.level.getGravity());
+            	
+            	try {
+            		
+					this.currentBird.setImage(ImageIO.read(new File(CharacterConstants.BIRD_FLYING)));
+					
+				} catch (IOException e) {
+					
+					e.printStackTrace();
+				}
             	
             	resultat = this.collisionManager.checkCollision();
 				
-            	
                 // conditions de victoire
                 if(resultat == 0) {
+                	
                     stop();
                     this.score++;
                     
                     targetsNumber--;
                     System.out.println(this.targetsNumber);
-                    if(this.targetsNumber == 0){
-                    	this.message = "Gagné : cliquez pour recommencer.";
-                    	gameOver=true;
+                    
+                    if(this.targetsNumber == 0) {
                     	
-                    } else{
-                    	this.message = "Plus que " + this.targetsNumber +" cibles.";
-                    	tryOver=true;
+                    	this.message = "Gagné ! Cliquez pour recommencer.";
+                    	gameOver = true;
+                    	
+                    } else {
+                    	
+                    	this.message = "Touché ! Plus que " + this.targetsNumber +" cible(s).";
+                    	tryOver = true;
                     }
                     
                 } else if(resultat == 1) {
                 	
-                	
-                	
                     if(this.tryNumber == 0 && this.targetsNumber > 0) {
                     	
 	                	stop();
-	                    this.message = "Perdu : cliquez pour recommencer.";
-	                    gameOver=true;
+	                    this.message = "Perdu... Cliquez pour recommencer.";
+	                    gameOver = true;
 	                    
                     } else {
                     	
 	                	stop();
-	                    this.message = "Plus que " + this.tryNumber +" essais.";
-	                    tryOver=true;
+	                    this.message = "Manqué !";
+	                    tryOver = true;
 	                }
                 }
 
@@ -275,61 +336,79 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
         }
     }
 
-    // évite les scintillements
+    /**
+     * Met à jour le dessin pour éviter les scintillements.
+     */
     public void update(Graphics g) {
+
         paint(g);
     }
     
-    // dessine le contenu de l'écran dans un buffer puis copie le buffer à l'écran
+    /**
+     * Dessine le contenu de l'écran dans un buffer 
+     * puis copie le buffer à l'écran.
+     */
     public void paint(Graphics g2) {
+    	
         if(buffer == null) buffer = createImage(800, 600);
         Graphics2D g = (Graphics2D) buffer.getGraphics();
 
         // fond
-        g.setColor(Color.WHITE);
-        g.fillRect(0, 0, getWidth(), getHeight());
+        g.drawImage(background, 0, 0, null);
+        /*g.setColor(Color.WHITE);
+        g.fillRect(0, 0, getWidth(), getHeight());*/
 
         // décor
-        g.setColor(Color.BLACK);
-        g.drawLine(0, 500, 800, 500);
-        g.drawLine(100, 500, 100, 400);
-
+        //g.setColor(Color.BLACK);
+        //g.drawLine(0, 560, 800, 560);
+        //g.drawLine(100, 500, 100, 400);
         
         // oiseau
-        g.setColor(Color.RED);
-        if(selecting) g.drawLine((int) currentBird.getPositionX(), (int) currentBird.getPositionY()+20, mouseX, mouseY); // montre l'angle et la vitesse
+        //g.setColor(Color.RED);
+        if(selecting) 
+        	g.drawLine((int) currentBird.getPositionX(), (int) currentBird.getPositionY() + 20, mouseX, mouseY); // montre l'angle et la vitesse
 
-        g.drawImage(currentBird.getImage(), (int) currentBird.getPositionX()-20, (int) currentBird.getPositionY()-20, this);
+        g.drawImage(currentBird.getImage(), (int) currentBird.getPositionX() - 20, (int) currentBird.getPositionY() - 20, this);
 
         // cochon
     	Iterator<Pig> ITpig = pigs.iterator();
-    	while(ITpig.hasNext()){
+    	
+    	while(ITpig.hasNext()) {
+    		
     		Pig p = ITpig.next();
-    		g.drawImage(p.getImage(), (int) p.getPositionX() , (int) p.getPositionY() -20, this);
+    		g.drawImage(p.getImage(), (int) p.getPositionX() , (int) p.getPositionY() - 20, this);
 		}
         
         // g.fillOval(, (int) currentPig.getPositionY() - 20, 40, 40);
 
         // messages
-        g.setColor(Color.BLACK);
-        g.drawString(message, 300, 100);
-        g.drawString("score: " + score, 20, 20);
-
+    	g.setColor(Color.BLACK);
+        g.setFont(new Font("Arial", Font.BOLD, 15));
+        drawCenteredString(g, message, 800, 30);
+        g.drawString("Score : " + score, 20, 20);
+        g.drawString("Essai(s) : " + (this.tryNumber + 1), 680, 20);
+        
         // affichage à l'écran sans scintillement
         g2.drawImage(buffer, 0, 0, null);
     }
-
-    // met le jeu dans une fenêtre
-    /*public static void main(String args[]) throws CloneNotSupportedException, IOException {
-        Frame frame = new Frame("Oiseau pas content");
-        final Game obj = new Game();
-        frame.addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent event) {
-                System.exit(0);
-            }
-        });
-        frame.add(obj);
-        frame.pack();
-        frame.setVisible(true);
-    }*/
+    
+    /**
+     * Crée un texte centré dans une zone.
+     * 
+     * @param g
+     * 		Le contenu graphique du jeu.
+     * @param text
+     * 		Le texte à afficher.
+     * @param width
+     * 		La largeur de la zone.
+     * @param height
+     * 		La hauteur de la zone.
+     */
+    public void drawCenteredString(Graphics g, String text, int width, int height) {
+    	
+        FontMetrics fm = g.getFontMetrics();
+        int x = (width - fm.stringWidth(text)) / 2;
+        int y = (fm.getAscent() + (height - (fm.getAscent() + fm.getDescent())) / 2);
+        g.drawString(text, x, y);
+    }
 }

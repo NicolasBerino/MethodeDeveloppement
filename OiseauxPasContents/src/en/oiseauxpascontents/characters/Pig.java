@@ -1,6 +1,5 @@
 package en.oiseauxpascontents.characters;
 
-import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
 
@@ -14,51 +13,71 @@ import javax.imageio.ImageIO;
  */
 public class Pig extends GameCharacter {
 	
-	boolean beaten = false;
+	private boolean beaten = false;
 	
-	public Pig() {
-	}
+	public Pig() {}
 	
 	public Pig(double posX, double posY) throws IOException{
 		
 		super(posX, posY);
-		Image im = ImageIO.read(new File("images/pig.png"));
-		this.setImage(im);
+		this.setImage(ImageIO.read(new File(CharacterConstants.PIG_IMAGE)));
 		this.setPositionX(Math.random()* 500 + 200);
 		this.setPositionY(480);
 	}
 
 	@Override
-	public void getCollision(GameCharacter gC) {
+	public void getCollision(GameCharacter gameCharacter) {
+		
 		beaten = true;
-		if(gC instanceof Bird){
+		
+		if(gameCharacter instanceof Bird) {
+			
 			try {
-				this.setImage(ImageIO.read(new File("images/pigBeaten.png")));
+				
+				this.setImage(ImageIO.read(new File(CharacterConstants.PIG_BEATEN)));
+				
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
+			
 			System.out.println("Collision entre cochon et oiseau.");
 		}
 	}
 	
+	/**
+	 * Vérifie si le cochon est touché.
+	 * 
+	 * @return true si le cochon est touché.
+	 */
 	public boolean isBeaten() {
+		
 		return beaten;
 	}
 
-	public void setBeaten(boolean beaten) {
-		this.beaten = beaten;
-	}
-
+	/**
+	 * Place le cochon dans le premier état (état normal avant le lancé).
+	 * 
+	 * @throws IOException Si l'image associée à cet état est inexistante.
+	 */
 	public void firstState() throws IOException{
-		if (!beaten){
-			this.setImage(ImageIO.read(new File("images/pig.png")));
+		
+		if (!beaten) {
+			
+			this.setImage(ImageIO.read(new File(CharacterConstants.PIG_IMAGE)));
 		}
 	}
 	
-	public void birdThrowed() throws IOException{
-		if(!beaten){
-			this.setImage(ImageIO.read(new File("images/pig2.png")));
+	/**
+	 * Place le cochon dans le second état (état pendant le lancé).
+	 * 
+	 * @throws IOException Si l'image associée à cet état est inexistante.
+	 */
+	public void secondState() throws IOException{
+		
+		if(!beaten) {
+			
+			this.setImage(ImageIO.read(new File(CharacterConstants.PIG_AFFRAID)));
 		}
 	}
 	

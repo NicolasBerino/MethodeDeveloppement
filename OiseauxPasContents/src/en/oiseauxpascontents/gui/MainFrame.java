@@ -31,11 +31,11 @@ public class MainFrame extends JFrame {
 	public void buildFrame(String title, JPanel panel, Dimension dimensions) {
 
 		this.setTitle(title);
-		this.setResizable(false);
-        if (dimensions != null)
+		if (dimensions != null)
 			this.setSize(dimensions);
         else
         	this.pack();
+		this.setResizable(false);
         this.setContentPane(panel);
 		this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

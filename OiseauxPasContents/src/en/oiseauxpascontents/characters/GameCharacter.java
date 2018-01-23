@@ -1,7 +1,6 @@
 package en.oiseauxpascontents.characters;
 
 import java.awt.Image;
-import java.io.IOException;
 
 /**
  * @author Nicolas Berino - Romain Semler
@@ -15,13 +14,13 @@ public abstract class GameCharacter implements Cloneable {
 	private double velocityX, velocityY;
 	private Image image;
 	
-	//TODO : ajouter type image
-	
 	public Image getImage() {
+		
 		return image;
 	}
 
 	public void setImage(Image image) {
+		
 		this.image = image;
 	}
 
@@ -35,11 +34,20 @@ public abstract class GameCharacter implements Cloneable {
 		velocityY = 0;
 	}
 	
-	public GameCharacter clone() throws CloneNotSupportedException{
+	/**
+	 * Gère la collision entre deux personnages.
+	 * 
+	 * @param gameCharacter
+	 * 		Le personnage qui a subi la collision.
+	 */
+	public abstract void getCollision(GameCharacter gameCharacter);
+	
+	public GameCharacter clone() throws CloneNotSupportedException {
+		
         return (GameCharacter) super.clone();
     }
 
-	public double getPositionX(){
+	public double getPositionX() {
 		return this.posX;
 	}
 	
@@ -70,6 +78,4 @@ public abstract class GameCharacter implements Cloneable {
 	public void setVelocityY(double velocityY) {
 		this.velocityY = velocityY;
 	}
-	
-	public abstract void getCollision(GameCharacter gC);
 }

@@ -16,7 +16,7 @@ public class Main {
 
     public static void main(String args[]) throws CloneNotSupportedException, IOException {
     	
-    	String title = "Oiseaux pas contents | Menu Principal";
+    	String title = "Oiseaux pas contents | Menu principal";
     	
     	MainFrame.getInstance().buildFrame(title, new MainMenu(), new Dimension(400, 200));
     }

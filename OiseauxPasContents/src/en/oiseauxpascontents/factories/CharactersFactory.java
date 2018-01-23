@@ -3,7 +3,7 @@ package en.oiseauxpascontents.factories;
 import java.util.HashMap;
 
 import en.oiseauxpascontents.characters.Bird;
-import en.oiseauxpascontents.characters.CharacterType;
+import en.oiseauxpascontents.characters.CharacterConstants;
 import en.oiseauxpascontents.characters.GameCharacter;
 import en.oiseauxpascontents.characters.Pig;
 
@@ -30,12 +30,26 @@ public class CharactersFactory {
 		return instance;
 	} 
 	
+	/**
+	 * Charge une instance de chaque personnages présents,
+	 * en vue de les cloner plus tard. 
+	 */
 	public void loadPrototypes() {
 		
-		prototypes.put(CharacterType.BIRD, new Bird());
-		prototypes.put(CharacterType.PIG, new Pig());
+		prototypes.put(CharacterConstants.BIRD, new Bird());
+		prototypes.put(CharacterConstants.PIG, new Pig());
 	}
 	
+	/**
+	 * Clone un personnage (récupère une instance clonée).
+	 * 
+	 * @param character
+	 * 		Le personnage à cloner.
+	 * 
+	 * @return Le personnage issu du clonage, "null" si le personnage n'existe pas.
+	 * 
+	 * @throws CloneNotSupportedException
+	 */
 	public GameCharacter getCharacter(String character) throws CloneNotSupportedException {
 		
 		if(character == null) 
