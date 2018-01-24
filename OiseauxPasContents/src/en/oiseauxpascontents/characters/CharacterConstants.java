@@ -16,6 +16,7 @@ public class CharacterConstants {
 	/* Personnages */
 	public static final String BIRD = "BIRD";
 	public static final String PIG = "PIG";
+	public static final String BLACK_HOLE = "BLACKHOLE";
 	
 	/* Images */
 	public static final String MENU_IMAGE = "images/background-menu.png";
@@ -27,7 +28,9 @@ public class CharacterConstants {
 	public static final String PIG_IMAGE = "images/pig.png";
 	public static final String PIG_BEATEN = "images/pig-beaten.png";
 	public static final String PIG_AFFRAID = "images/pig2.png";
+	public static final String BLACK_HOLE_IMAGE = "images/blackHole.png";
 	public static final String BACKGROUND = "images/background-game.png";
+	
 	
 	/*Niveau*/
 	public static final int COORD_X_LEVEL = 780;

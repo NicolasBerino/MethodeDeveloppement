@@ -12,7 +12,9 @@ import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 import en.oiseauxpascontents.characters.Bird;
+import en.oiseauxpascontents.characters.BlackHole;
 import en.oiseauxpascontents.characters.CharacterConstants;
+import en.oiseauxpascontents.characters.Gravity;
 import en.oiseauxpascontents.characters.Pig;
 
 import java.awt.event.*;
@@ -47,6 +49,7 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
     
     private ArrayList<Bird> birds;				// Liste des instances d'oiseaux (clones)
     private ArrayList<Pig> pigs;				// Liste des instances de cochons (clones)
+    private ArrayList<Gravity> gravities;			// Liste des différentes gravités
     
     private Level level;						// Niveau à paramétrer
     
@@ -162,6 +165,15 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
     		p.setPositionY(CharacterConstants.COORD_Y_LEVEL);
     	
     	}
+    	
+    	Iterator<Gravity> ITgrav = gravities.iterator();
+    	ITgrav.next();
+    	while(ITpig.hasNext()){
+    		BlackHole blHo = (BlackHole) ITgrav.next();
+    		blHo.setPositionX(Math.random() *500 +200);
+    		blHo.setPositionY(Math.random() *500 +200);
+    	}
+    	
     	
     	initTry();
     }
@@ -280,7 +292,8 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
                 // moteur physique
             	this.currentBird.setPositionX(this.currentBird.getPositionX() + this.currentBird.getVelocityX());
             	this.currentBird.setPositionY(this.currentBird.getPositionY() + this.currentBird.getVelocityY());
-            	this.currentBird.setVelocityY(this.currentBird.getVelocityY() + this.level.getGravity());
+            	this.level.applyGravity(this.currentBird);
+            	//this.currentBird.setVelocityY(Gravity.addGravity(this.currentBird,this.level.getGravity()));
             	
             	try {
             		

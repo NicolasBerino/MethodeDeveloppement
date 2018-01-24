@@ -3,6 +3,7 @@ package en.oiseauxpascontents.factories;
 import java.util.HashMap;
 
 import en.oiseauxpascontents.characters.Bird;
+import en.oiseauxpascontents.characters.BlackHole;
 import en.oiseauxpascontents.characters.CharacterConstants;
 import en.oiseauxpascontents.characters.GameCharacter;
 import en.oiseauxpascontents.characters.Pig;
@@ -38,6 +39,7 @@ public class CharactersFactory {
 		
 		prototypes.put(CharacterConstants.BIRD, new Bird());
 		prototypes.put(CharacterConstants.PIG, new Pig());
+		prototypes.put(CharacterConstants.BLACK_HOLE, new BlackHole());
 	}
 	
 	/**

@@ -1,9 +1,14 @@
 package en.oiseauxpascontents.game;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import en.oiseauxpascontents.characters.Bird;
+import en.oiseauxpascontents.characters.BlackHole;
 import en.oiseauxpascontents.characters.CharacterConstants;
+import en.oiseauxpascontents.characters.ClassicGravity;
+import en.oiseauxpascontents.characters.GameCharacter;
+import en.oiseauxpascontents.characters.Gravity;
 import en.oiseauxpascontents.characters.Pig;
 import en.oiseauxpascontents.factories.CharactersFactory;
 
@@ -19,18 +24,18 @@ public class Level {
     private int nbPig;					// Nombre de cochons
     private int nbBlackHoles;			// Nombre de trous noirs.
     
-    private double gravity;     		// gravité
+    private ArrayList<Gravity> gravities;     		// gravité
     
-	public Level(int nbBird, int nbPig, int nbBlackHoles, double gravity) {
+	public Level(int nbBird, int nbPig, int nbBlackHoles, double gravity) throws CloneNotSupportedException {
 		
 		this.nbBird = nbBird;
 		this.nbPig = nbPig;
 		this.nbBlackHoles = nbBlackHoles;
-		this.gravity = gravity;
+		this.gravities= new ArrayList<Gravity>();
+		this.gravities.add(new ClassicGravity(gravity));
+		this.gravities.addAll(getBlackHoles());
 		
 		CharactersFactory.getInstance().loadPrototypes();
-		
-		System.out.println("Niveau initialisé avec " + nbBird + " essai(s), " + nbPig + " cochon(s) et " + nbBlackHoles + " trou(s) noir (gravité : " + this.gravity + " ).");
 	}
 
 	/**
@@ -71,16 +76,20 @@ public class Level {
 		return pigs;
 	}
 
-	public double getGravity() {
-		
-		return gravity;
-	}
-
-	public void setGravity(double gravity) {
-		
-		this.gravity = gravity;
+	public ArrayList<BlackHole> getBlackHoles() throws CloneNotSupportedException{
+		ArrayList<BlackHole> blackHoles = new ArrayList<BlackHole>();
+		for(int i = 0;i< nbBlackHoles;i++){
+			blackHoles.add((BlackHole)CharactersFactory.getInstance().getCharacter(CharacterConstants.BLACK_HOLE));
+		}
+		return blackHoles;
 	}
 	
+	
+	public ArrayList<Gravity> getListGravity() {
+		
+		return gravities;
+	}
+
 	public int getNbBlackHoles() {
 		
 		return nbBlackHoles;
@@ -90,4 +99,12 @@ public class Level {
 		
 		this.nbBlackHoles = nbBlackHoles;
 	}
+	
+	public void applyGravity(GameCharacter token){
+		Iterator<Gravity> itGrav = gravities.iterator();
+		while(itGrav.hasNext()){
+			itGrav.next().actOn(token);
+		}
+	}
+	
 }
