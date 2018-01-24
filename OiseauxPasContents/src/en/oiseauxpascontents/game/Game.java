@@ -166,13 +166,13 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
     	
     	}
     	
-    	Iterator<Gravity> ITgrav = gravities.iterator();
+    	/*Iterator<Gravity> ITgrav = gravities.iterator();
     	ITgrav.next();
     	while(ITpig.hasNext()){
     		BlackHole blHo = (BlackHole) ITgrav.next();
     		blHo.setPositionX(Math.random() *500 +200);
     		blHo.setPositionY(Math.random() *500 +200);
-    	}
+    	}*/
     	
     	
     	initTry();
