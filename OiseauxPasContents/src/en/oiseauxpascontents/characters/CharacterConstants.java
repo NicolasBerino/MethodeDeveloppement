@@ -28,4 +28,8 @@ public class CharacterConstants {
 	public static final String PIG_BEATEN = "images/pig-beaten.png";
 	public static final String PIG_AFFRAID = "images/pig2.png";
 	public static final String BACKGROUND = "images/background-game.png";
+	
+	/*Niveau*/
+	public static final int COORD_X_LEVEL = 780;
+	public static final int COORD_Y_LEVEL = 510;
 }

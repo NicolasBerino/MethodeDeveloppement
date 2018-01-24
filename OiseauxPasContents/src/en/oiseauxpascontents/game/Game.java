@@ -63,7 +63,6 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
     	this.initialTargetNumber = nbPigs;
     	this.blackHolesNumber = nbBlackHoles;
     	this.gravity = gravity;
-    	
         addMouseListener(this);
         addMouseMotionListener(this);
         
@@ -160,7 +159,7 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
     		}
     		
     		p.setPositionX(newPosition);// position aléatoire pour le cochon
-    		p.setPositionY(480);
+    		p.setPositionY(CharacterConstants.COORD_Y_LEVEL);
     	
     	}
     	

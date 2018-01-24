@@ -3,6 +3,7 @@ package en.oiseauxpascontents.game;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import en.oiseauxpascontents.characters.CharacterConstants;
 import en.oiseauxpascontents.characters.GameCharacter;
 
 /**
@@ -79,7 +80,7 @@ public class CollisionManager {
 				}
 			}
 			
-			if(gc1.getPositionX() < 20 || gc1.getPositionX() > 780 ||gc1.getPositionY() < 0 || gc1.getPositionY() > 480) {
+			if(gc1.getPositionX() < 20 || gc1.getPositionX() > CharacterConstants.COORD_X_LEVEL ||gc1.getPositionY() < 0 || gc1.getPositionY() > CharacterConstants.COORD_Y_LEVEL) {
 				
 				gc1.getCollision(null);//collision avec le sol ou un mur
 				return 1;

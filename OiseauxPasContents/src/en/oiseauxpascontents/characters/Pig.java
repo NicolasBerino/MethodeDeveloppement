@@ -20,9 +20,6 @@ public class Pig extends GameCharacter {
 	public Pig(double posX, double posY) throws IOException{
 		
 		super(posX, posY);
-		this.setImage(ImageIO.read(new File(CharacterConstants.PIG_IMAGE)));
-		this.setPositionX(Math.random()* 500 + 200);
-		this.setPositionY(480);
 	}
 
 	@Override
