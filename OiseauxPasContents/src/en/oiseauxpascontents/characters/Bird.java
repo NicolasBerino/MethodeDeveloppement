@@ -5,6 +5,8 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import en.oiseauxpascontents.game.GameConstants;
+
 /**
  * @author Nicolas Berino - Romain Semler
  * @version 1.1
@@ -13,13 +15,12 @@ import javax.imageio.ImageIO;
  */
 public class Bird extends GameCharacter {
 	
-	public Bird() {
-	}
+	public Bird() {}
 	
 	public Bird(double posX, double posY) throws IOException {
 		
 		super(posX, posY);
-		this.setImage(ImageIO.read(new File(CharacterConstants.BIRD_IMAGE)));
+		this.setImage(ImageIO.read(new File(GameConstants.BIRD_IMAGE)));
 	}
 
 	@Override
@@ -29,7 +30,7 @@ public class Bird extends GameCharacter {
 			
 			try {
 				
-				this.setImage(ImageIO.read(new File(CharacterConstants.BEAT_IMAGE)));
+				this.setImage(ImageIO.read(new File(GameConstants.BEAT_IMAGE)));
 				
 			} catch (IOException e) {
 				
@@ -42,7 +43,7 @@ public class Bird extends GameCharacter {
 			
 			try {
 				
-				this.setImage(ImageIO.read(new File(CharacterConstants.BIRD_CRASHED)));
+				this.setImage(ImageIO.read(new File(GameConstants.BIRD_CRASHED)));
 				
 			} catch (IOException e) {
 				

@@ -4,9 +4,9 @@ import java.util.HashMap;
 
 import en.oiseauxpascontents.characters.Bird;
 import en.oiseauxpascontents.characters.BlackHole;
-import en.oiseauxpascontents.characters.CharacterConstants;
 import en.oiseauxpascontents.characters.GameCharacter;
 import en.oiseauxpascontents.characters.Pig;
+import en.oiseauxpascontents.game.GameConstants;
 
 /**
  * @author Nicolas Berino - Romain Semler
@@ -37,9 +37,9 @@ public class CharactersFactory {
 	 */
 	public void loadPrototypes() {
 		
-		prototypes.put(CharacterConstants.BIRD, new Bird());
-		prototypes.put(CharacterConstants.PIG, new Pig());
-		prototypes.put(CharacterConstants.BLACK_HOLE, new BlackHole());
+		prototypes.put(GameConstants.BIRD, new Bird());
+		prototypes.put(GameConstants.PIG, new Pig());
+		prototypes.put(GameConstants.BLACK_HOLE, new BlackHole());
 	}
 	
 	/**

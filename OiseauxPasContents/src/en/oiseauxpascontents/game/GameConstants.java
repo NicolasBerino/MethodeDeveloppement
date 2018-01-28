@@ -1,4 +1,4 @@
-package en.oiseauxpascontents.characters;
+package en.oiseauxpascontents.game;
 
 /**
  * @author Nicolas Berino - Romain Semler
@@ -7,7 +7,7 @@ package en.oiseauxpascontents.characters;
  * Classe constituée de constantes pour identifier 
  * les différents composants de l'application.
  */
-public class CharacterConstants {
+public class GameConstants {
 	
 	/* Type des personnages */
 	public static final String ATTACKERS = "ATTACKERS";

@@ -13,7 +13,6 @@ import javax.swing.JPanel;
 
 import en.oiseauxpascontents.characters.Bird;
 import en.oiseauxpascontents.characters.BlackHole;
-import en.oiseauxpascontents.characters.CharacterConstants;
 import en.oiseauxpascontents.characters.Gravity;
 import en.oiseauxpascontents.characters.Pig;
 
@@ -55,7 +54,7 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
     
     private Bird currentBird;					
    
-    private Image background = ImageIO.read(new File(CharacterConstants.BACKGROUND));
+    private Image background = ImageIO.read(new File(GameConstants.BACKGROUND));
     
     private CollisionManager collisionManager = CollisionManager.getInstance();
 
@@ -146,7 +145,7 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
     	
     	while(ITpig.hasNext()) {
     		
-    		ITpig.next().setImage(ImageIO.read(new File(CharacterConstants.PIG_IMAGE)));
+    		ITpig.next().setImage(ImageIO.read(new File(GameConstants.PIG_IMAGE)));
     	}
     	
     	ITpig = pigs.iterator();
@@ -162,7 +161,7 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
     		}
     		
     		p.setPositionX(newPosition);// position aléatoire pour le cochon
-    		p.setPositionY(CharacterConstants.COORD_Y_LEVEL);
+    		p.setPositionY(GameConstants.COORD_Y_LEVEL);
     	
     	}
     	
@@ -209,7 +208,7 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
     	this.tryNumber--;
     	this.currentBird = this.birds.get(this.initialTryNumber - this.tryNumber - 1);
     	
-    	this.currentBird.setImage(ImageIO.read(new File(CharacterConstants.BIRD_IMAGE)));
+    	this.currentBird.setImage(ImageIO.read(new File(GameConstants.BIRD_IMAGE)));
 
     	Iterator<Pig> ITpig = pigs.iterator();
     	
@@ -297,7 +296,7 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
             	
             	try {
             		
-					this.currentBird.setImage(ImageIO.read(new File(CharacterConstants.BIRD_FLYING)));
+					this.currentBird.setImage(ImageIO.read(new File(GameConstants.BIRD_FLYING)));
 					
 				} catch (IOException e) {
 					

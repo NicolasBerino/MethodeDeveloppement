@@ -5,7 +5,6 @@ import java.util.Iterator;
 
 import en.oiseauxpascontents.characters.Bird;
 import en.oiseauxpascontents.characters.BlackHole;
-import en.oiseauxpascontents.characters.CharacterConstants;
 import en.oiseauxpascontents.characters.ClassicGravity;
 import en.oiseauxpascontents.characters.GameCharacter;
 import en.oiseauxpascontents.characters.Gravity;
@@ -51,7 +50,7 @@ public class Level {
 		
 		for(int i = 0; i < nbBird; i++) {
 			
-			birds.add((Bird)CharactersFactory.getInstance().getCharacter(CharacterConstants.BIRD));
+			birds.add((Bird)CharactersFactory.getInstance().getCharacter(GameConstants.BIRD));
 		}
 		
 		return birds;
@@ -70,7 +69,7 @@ public class Level {
 		
 		for(int i = 0; i < nbPig; i++){
 			
-			pigs.add((Pig)CharactersFactory.getInstance().getCharacter(CharacterConstants.PIG));
+			pigs.add((Pig)CharactersFactory.getInstance().getCharacter(GameConstants.PIG));
 		}
 		
 		return pigs;
@@ -79,7 +78,7 @@ public class Level {
 	public ArrayList<BlackHole> getBlackHoles() throws CloneNotSupportedException{
 		ArrayList<BlackHole> blackHoles = new ArrayList<BlackHole>();
 		for(int i = 0;i< nbBlackHoles;i++){
-			blackHoles.add((BlackHole)CharactersFactory.getInstance().getCharacter(CharacterConstants.BLACK_HOLE));
+			blackHoles.add((BlackHole)CharactersFactory.getInstance().getCharacter(GameConstants.BLACK_HOLE));
 		}
 		return blackHoles;
 	}

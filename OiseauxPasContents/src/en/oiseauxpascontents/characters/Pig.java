@@ -5,6 +5,8 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import en.oiseauxpascontents.game.GameConstants;
+
 /**
  * @author Nicolas Berino - Romain Semler
  * @version 1.0
@@ -31,7 +33,7 @@ public class Pig extends GameCharacter {
 			
 			try {
 				
-				this.setImage(ImageIO.read(new File(CharacterConstants.PIG_BEATEN)));
+				this.setImage(ImageIO.read(new File(GameConstants.PIG_BEATEN)));
 				
 			} catch (IOException e) {
 				
@@ -61,7 +63,7 @@ public class Pig extends GameCharacter {
 		
 		if (!beaten) {
 			
-			this.setImage(ImageIO.read(new File(CharacterConstants.PIG_IMAGE)));
+			this.setImage(ImageIO.read(new File(GameConstants.PIG_IMAGE)));
 		}
 	}
 	
@@ -74,7 +76,7 @@ public class Pig extends GameCharacter {
 		
 		if(!beaten) {
 			
-			this.setImage(ImageIO.read(new File(CharacterConstants.PIG_AFFRAID)));
+			this.setImage(ImageIO.read(new File(GameConstants.PIG_AFFRAID)));
 		}
 	}
 	

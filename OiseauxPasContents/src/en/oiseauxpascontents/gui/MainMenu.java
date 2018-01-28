@@ -14,7 +14,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-import en.oiseauxpascontents.characters.CharacterConstants;
+import en.oiseauxpascontents.game.GameConstants;
 
 /**
  * @author Nicolas Berino - Romain Semler
@@ -36,7 +36,7 @@ public class MainMenu extends JPanel implements IPanel, ActionListener {
 	private Font title2 = new Font("Arial", Font.BOLD, 15);
 	private Font buttonFont = new Font("Futura", Font.BOLD, 15);
 	
-	private Image background = Toolkit.getDefaultToolkit().getImage(CharacterConstants.MENU_IMAGE);
+	private Image background = Toolkit.getDefaultToolkit().getImage(GameConstants.MENU_IMAGE);
 	
 	public MainMenu() {
 		
