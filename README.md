@@ -6,4 +6,5 @@
 ## Déploiement / Exécution (fichier JAR à venir le 01/02/2018)
 - Exécuter le JAR avec la commande `java -jar OPC.jar`
    
+## Auteurs
 Nicolas BERINO, Romain SEMLER
