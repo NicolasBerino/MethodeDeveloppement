@@ -1,10 +1,16 @@
 package en.oiseauxpascontents.characters;
 
-
-public class BlackHole extends Gravity{
+/**
+ * @author Nicolas Berino - Romain Semler
+ * @version 1.0
+ *
+ * Classe identifiant un personnage "trou noir". 
+ */
+public class BlackHole extends Gravity {
 
 	@Override
 	public void actOn(GameCharacter token) {
+		
 		double distance = distance(token.getPositionX(), token.getPositionY(),this.getPositionX(), this.getPositionY());
 		if(distance < 150){
 			token.setVelocityX(token.getVelocityX()+(this.getPositionX()/200));
@@ -15,6 +21,7 @@ public class BlackHole extends Gravity{
 
 	@Override
 	public void getCollision(GameCharacter gameCharacter) {
+		
 		System.out.println("test");
 		gameCharacter.setVelocityX(0);
 		gameCharacter.setVelocityY(0);

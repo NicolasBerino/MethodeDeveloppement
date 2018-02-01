@@ -6,18 +6,18 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Toolkit;
 import java.util.*;
 
-import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 import en.oiseauxpascontents.characters.Bird;
 import en.oiseauxpascontents.characters.BlackHole;
 import en.oiseauxpascontents.characters.Gravity;
 import en.oiseauxpascontents.characters.Pig;
+import en.oiseauxpascontents.main.Main;
 
 import java.awt.event.*;
-import java.io.File;
 import java.io.IOException;
 
 /**
@@ -54,7 +54,7 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
     
     private Bird currentBird;					
    
-    private Image background = ImageIO.read(new File(GameConstants.BACKGROUND));
+    private Image background = Toolkit.getDefaultToolkit().getImage(Main.class.getResource(GameConstants.BACKGROUND_IMAGE));
     
     private CollisionManager collisionManager = CollisionManager.getInstance();
 
@@ -147,7 +147,7 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
     	double newPosition;
     	while(ITpig.hasNext()) {
     		
-    		ITpig.next().setImage(ImageIO.read(new File(GameConstants.PIG_IMAGE)));
+    		ITpig.next().setImage(Toolkit.getDefaultToolkit().getImage(Main.class.getResource(GameConstants.PIG_IMAGE)));
     	}
     	
     	ITpig = pigs.iterator();
@@ -171,7 +171,7 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
 	    	ITgrav.next();
 	    	while(ITgrav.hasNext()){
 	    		BlackHole blHo = (BlackHole) ITgrav.next();
-	    		blHo.setImage(ImageIO.read(new File(GameConstants.BLACK_HOLE_IMAGE)));
+	    		blHo.setImage(Toolkit.getDefaultToolkit().getImage(Main.class.getResource(GameConstants.BLACK_HOLE_IMAGE)));
 	    		while(!freePositionBlackHole(newPosition)) {
 	    			
 	    			newPosition = Math.random() * 500 + 200;
@@ -238,7 +238,7 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
     	this.tryNumber--;
     	this.currentBird = this.birds.get(this.initialTryNumber - this.tryNumber - 1);
     	
-    	this.currentBird.setImage(ImageIO.read(new File(GameConstants.BIRD_IMAGE)));
+    	this.currentBird.setImage(Toolkit.getDefaultToolkit().getImage(Main.class.getResource(GameConstants.BIRD_IMAGE)));
 
     	Iterator<Pig> ITpig = pigs.iterator();
     	
@@ -330,16 +330,8 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
             	this.currentBird.setPositionX(this.currentBird.getPositionX() + this.currentBird.getVelocityX());
             	this.currentBird.setPositionY(this.currentBird.getPositionY() + this.currentBird.getVelocityY());
             	this.level.applyGravity(this.currentBird);
-            	//this.currentBird.setVelocityY(Gravity.addGravity(this.currentBird,this.level.getGravity()));
             	
-            	try {
-            		
-					this.currentBird.setImage(ImageIO.read(new File(GameConstants.BIRD_FLYING)));
-					
-				} catch (IOException e) {
-					
-					e.printStackTrace();
-				}
+            	this.currentBird.setImage(Toolkit.getDefaultToolkit().getImage(Main.class.getResource(GameConstants.BIRD_FLYING_IMAGE)));
             	
             	resultat = this.collisionManager.checkCollision();
 				
@@ -350,7 +342,6 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
                     this.score++;
                     
                     targetsNumber--;
-                    System.out.println(this.targetsNumber);
                     
                     if(this.targetsNumber == 0) {
                     	
@@ -402,24 +393,15 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
         if(buffer == null) buffer = createImage(800, 600);
         Graphics2D g = (Graphics2D) buffer.getGraphics();
 
-        // fond
+        // FOND
         g.drawImage(background, 0, 0, null);
-        /*g.setColor(Color.WHITE);
-        g.fillRect(0, 0, getWidth(), getHeight());*/
 
-        // décor
-        //g.setColor(Color.BLACK);
-        //g.drawLine(0, 560, 800, 560);
-        //g.drawLine(100, 500, 100, 400);
-        
-        // oiseau
-        //g.setColor(Color.RED);
         if(selecting) 
         	g.drawLine((int) currentBird.getPositionX(), (int) currentBird.getPositionY() + 20, mouseX, mouseY); // montre l'angle et la vitesse
 
         g.drawImage(currentBird.getImage(), (int) currentBird.getPositionX() - 20, (int) currentBird.getPositionY() - 20, this);
 
-        // cochon
+        // COCHON
     	Iterator<Pig> ITpig = pigs.iterator();
     	
     	while(ITpig.hasNext()) {
@@ -429,7 +411,7 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
 		}
         
     	
-    	 // black hole
+    	 // TROU NOIR
     	Iterator<Gravity> ITBH = gravities.iterator();
     	ITBH.next();
     	
@@ -438,17 +420,15 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
     		BlackHole bH = (BlackHole) ITBH.next();
     		g.drawImage(bH.getImage(), (int) bH.getPositionX()-100, (int) bH.getPositionY()-100, this);
 		}
-    	
-        // g.fillOval(, (int) currentPig.getPositionY() - 20, 40, 40);
 
-        // messages
+        // MESSAGES
     	g.setColor(Color.BLACK);
         g.setFont(new Font("Arial", Font.BOLD, 15));
         drawCenteredString(g, message, 800, 30);
         g.drawString("Score : " + score, 20, 20);
         g.drawString("Essai(s) : " + (this.tryNumber + 1), 680, 20);
         
-        // affichage à l'écran sans scintillement
+        // AFFICHAGE ECRAN SANS SCINTILLEMENTS
         g2.drawImage(buffer, 0, 0, null);
     }
     

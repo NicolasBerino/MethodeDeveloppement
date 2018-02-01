@@ -19,17 +19,17 @@ public class GameConstants {
 	public static final String BLACK_HOLE = "BLACKHOLE";
 	
 	/* Images */
-	public static final String MENU_IMAGE = "images/background-menu.png";
-	public static final String BEAT_IMAGE = "images/boom.png";
-	public static final String BIRD_IMAGE = "images/bird.png";
-	public static final String BIRD_CRASHED = "images/bird-crashed.png";
-	public static final String BIRD_FLYING = "images/bird-flying.png";
-	public static final String BIRD_FALLING = "images/bird-falling.png";
-	public static final String PIG_IMAGE = "images/pig.png";
-	public static final String PIG_BEATEN = "images/pig-beaten.png";
-	public static final String PIG_AFFRAID = "images/pig2.png";
-	public static final String BLACK_HOLE_IMAGE = "images/blackHole.png";
-	public static final String BACKGROUND = "images/background-game.png";
+	public static final String MENU_IMAGE = "/background-menu.png";
+	public static final String BEAT_IMAGE = "/boom.png";
+	public static final String BIRD_IMAGE = "/bird.png";
+	public static final String BIRD_CRASHED_IMAGE = "/bird-crashed.png";
+	public static final String BIRD_FLYING_IMAGE = "/bird-flying.png";
+	public static final String BIRD_FALLING_IMAGE = "/bird-falling.png";
+	public static final String PIG_IMAGE = "/pig.png";
+	public static final String PIG_BEATEN_IMAGE = "/pig-beaten.png";
+	public static final String PIG_AFFRAID_IMAGE = "/pig2.png";
+	public static final String BLACK_HOLE_IMAGE = "/blackHole.png";
+	public static final String BACKGROUND_IMAGE = "/background-game.png";
 	
 	
 	/*Niveau*/

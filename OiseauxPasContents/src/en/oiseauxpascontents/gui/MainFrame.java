@@ -28,6 +28,16 @@ public class MainFrame extends JFrame {
 		return instance;
 	}
 	
+	/**
+	 * Construit la fenêtre graphique.
+	 * 
+	 * @param title
+	 * 		Le titre de la fenêtre à afficher.
+	 * @param panel
+	 * 		Le panel contenu dans la fenêtre.
+	 * @param dimensions
+	 * 		Les dimensions de la fenêtre.
+	 */
 	public void buildFrame(String title, JPanel panel, Dimension dimensions) {
 
 		this.setTitle(title);

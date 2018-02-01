@@ -101,10 +101,19 @@ public class Level {
 		this.nbBlackHoles = nbBlackHoles;
 	}
 	
-	public void applyGravity(GameCharacter token){
+	/**
+	 * Applique la gravité à un élément du jeu.
+	 * 
+	 * @param character
+	 * 		L'élément du jeu.
+	 */
+	public void applyGravity(GameCharacter character) {
+		
 		Iterator<Gravity> itGrav = gravities.iterator();
-		while(itGrav.hasNext()){
-			itGrav.next().actOn(token);
+		
+		while(itGrav.hasNext()) {
+			
+			itGrav.next().actOn(character);
 		}
 	}
 	

@@ -8,5 +8,8 @@ package en.oiseauxpascontents.gui;
  */
 public interface IPanel {
 
+	/**
+	 * Construit le panel graphique.
+	 */
 	public void build();
 }

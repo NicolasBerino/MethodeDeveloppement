@@ -1,11 +1,10 @@
 package en.oiseauxpascontents.characters;
 
-import java.io.File;
+import java.awt.Toolkit;
 import java.io.IOException;
 
-import javax.imageio.ImageIO;
-
 import en.oiseauxpascontents.game.GameConstants;
+import en.oiseauxpascontents.main.Main;
 
 /**
  * @author Nicolas Berino - Romain Semler
@@ -31,16 +30,7 @@ public class Pig extends GameCharacter {
 		
 		if(gameCharacter instanceof Bird) {
 			
-			try {
-				
-				this.setImage(ImageIO.read(new File(GameConstants.PIG_BEATEN)));
-				
-			} catch (IOException e) {
-				
-				e.printStackTrace();
-			}
-			
-			System.out.println("Collision entre cochon et oiseau.");
+			this.setImage(Toolkit.getDefaultToolkit().getImage(Main.class.getResource(GameConstants.PIG_BEATEN_IMAGE)));
 		}
 	}
 	
@@ -63,7 +53,7 @@ public class Pig extends GameCharacter {
 		
 		if (!beaten) {
 			
-			this.setImage(ImageIO.read(new File(GameConstants.PIG_IMAGE)));
+			this.setImage(Toolkit.getDefaultToolkit().getImage(Main.class.getResource(GameConstants.PIG_IMAGE)));
 		}
 	}
 	
@@ -76,7 +66,7 @@ public class Pig extends GameCharacter {
 		
 		if(!beaten) {
 			
-			this.setImage(ImageIO.read(new File(GameConstants.PIG_AFFRAID)));
+			this.setImage(Toolkit.getDefaultToolkit().getImage(Main.class.getResource(GameConstants.PIG_AFFRAID_IMAGE)));
 		}
 	}
 	

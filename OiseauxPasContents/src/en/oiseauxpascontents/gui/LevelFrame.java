@@ -20,6 +20,12 @@ import javax.swing.event.ChangeListener;
 
 import en.oiseauxpascontents.game.Game;
 
+/**
+ * @author Nicolas Berino - Romain Semler
+ * @version 1.0
+ *
+ * Panel de gestion des paramètres du niveau.
+ */
 public class LevelFrame extends JPanel implements IPanel, ActionListener {
 
 	private static final long serialVersionUID = 1L;

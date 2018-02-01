@@ -1,11 +1,10 @@
 package en.oiseauxpascontents.characters;
 
-import java.io.File;
+import java.awt.Toolkit;
 import java.io.IOException;
 
-import javax.imageio.ImageIO;
-
 import en.oiseauxpascontents.game.GameConstants;
+import en.oiseauxpascontents.main.Main;
 
 /**
  * @author Nicolas Berino - Romain Semler
@@ -20,7 +19,7 @@ public class Bird extends GameCharacter {
 	public Bird(double posX, double posY) throws IOException {
 		
 		super(posX, posY);
-		this.setImage(ImageIO.read(new File(GameConstants.BIRD_IMAGE)));
+		this.setImage(Toolkit.getDefaultToolkit().getImage(Main.class.getResource(GameConstants.BIRD_IMAGE)));
 	}
 
 	@Override
@@ -28,29 +27,11 @@ public class Bird extends GameCharacter {
 		
 		if(gameCharacter instanceof Pig){
 			
-			try {
-				
-				this.setImage(ImageIO.read(new File(GameConstants.BEAT_IMAGE)));
-				
-			} catch (IOException e) {
-				
-				e.printStackTrace();
-			}
-			
-			System.out.println("Collision entre oiseau et cochon.");
+			this.setImage(Toolkit.getDefaultToolkit().getImage(Main.class.getResource(GameConstants.BEAT_IMAGE)));
 		
 		} else {
 			
-			try {
-				
-				this.setImage(ImageIO.read(new File(GameConstants.BIRD_CRASHED)));
-				
-			} catch (IOException e) {
-				
-				e.printStackTrace();
-			}
-			
-			System.out.println("Collision entre oiseau et mur ou sol.");
+			this.setImage(Toolkit.getDefaultToolkit().getImage(Main.class.getResource(GameConstants.BIRD_CRASHED_IMAGE)));
 		}
 	}
 	
