@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import en.oiseauxpascontents.characters.GameCharacter;
+import en.oiseauxpascontents.characters.Pig;
 
 /**
  * @author Nicolas Berino - Romain Semler
@@ -68,14 +69,16 @@ public class CollisionManager {
 				
 				GameCharacter gc2 = itOC2.next();
 				
-				if (gc1 == gc2) 
-					break;
+				if (gc1 == gc2) {}
 				
-				if(distance(gc1.getPositionX(), gc1.getPositionY(), gc2.getPositionX(), gc2.getPositionY()) < 35) {
+				else if(distance(gc1.getPositionX(), gc1.getPositionY(), gc2.getPositionX(), gc2.getPositionY()) < 35) {
 					
 					gc1.getCollision(gc2);
 					gc2.getCollision(gc1);
-					return 0;
+					if(gc1 instanceof Pig || gc2  instanceof Pig)
+						return 0;
+					else
+						return 1;
 				}
 			}
 			

@@ -140,22 +140,24 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
     	
     	this.birds = this.level.getBirds();
     	this.pigs = this.level.getPigs();
+    	this.gravities = this.level.getListGravity();
     	
     	Iterator<Pig> ITpig = pigs.iterator();
     	
+    	double newPosition;
     	while(ITpig.hasNext()) {
     		
     		ITpig.next().setImage(ImageIO.read(new File(GameConstants.PIG_IMAGE)));
     	}
     	
     	ITpig = pigs.iterator();
-    	double newPosition = Math.random() * 500 + 200;
+    	newPosition = Math.random() * 500 + 200;
     	
     	while(ITpig.hasNext()) {
     		
     		Pig p = ITpig.next();
     		
-    		while(!freePosition(newPosition)) {
+    		while(!freePositionPig(newPosition)) {
     			
     			newPosition = Math.random() * 500 + 200;
     		}
@@ -164,34 +166,62 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
     		p.setPositionY(GameConstants.COORD_Y_LEVEL);
     	
     	}
-    	
-    	/*Iterator<Gravity> ITgrav = gravities.iterator();
-    	ITgrav.next();
-    	while(ITpig.hasNext()){
-    		BlackHole blHo = (BlackHole) ITgrav.next();
-    		blHo.setPositionX(Math.random() *500 +200);
-    		blHo.setPositionY(Math.random() *500 +200);
-    	}*/
+    	if(gravities!=null) {
+	    	Iterator<Gravity> ITgrav = gravities.iterator();
+	    	ITgrav.next();
+	    	while(ITgrav.hasNext()){
+	    		BlackHole blHo = (BlackHole) ITgrav.next();
+	    		blHo.setImage(ImageIO.read(new File(GameConstants.BLACK_HOLE_IMAGE)));
+	    		while(!freePositionBlackHole(newPosition)) {
+	    			
+	    			newPosition = Math.random() * 500 + 200;
+	    		}
+	    		
+	    		blHo.setPositionX(newPosition);// position aléatoire pour le trou noir
+	    		blHo.setPositionY(Math.random()* +200);
+	    	}
+    	}
     	
     	
     	initTry();
     }
     
     /**
-     * Vérifie si une position est libre.
+     * Vérifie si une position d'un cochon est libre.
      * 
      * @param position
      * 		La position courante.
      * 
      * @return true si la position est libre.
      */
-    boolean freePosition(double position) {
+    boolean freePositionPig(double position) {
     	
     	Iterator<Pig> ITpig2 = pigs.iterator();
     	
     	while(ITpig2.hasNext()) {
     		
     		if(Math.abs(position - ITpig2.next().getPositionX()) < 40) 
+    			return false;
+    	}
+    	
+    	return true;
+    }
+    
+    /**
+     * Vérifie si une position d'un trou noir est libre.
+     * 
+     * @param position
+     * 		La position courante.
+     * 
+     * @return true si la position est libre.
+     */
+    boolean freePositionBlackHole(double position) {
+    	
+    	Iterator<Gravity> ITBH = gravities.iterator();
+    	ITBH.next();
+    	while(ITBH.hasNext()) {
+    		
+    		if(Math.abs(position - ITBH.next().getPositionX()) < 40) 
     			return false;
     	}
     	
@@ -227,6 +257,14 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
     	while(ITpig.hasNext()) {
     		
     		this.collisionManager.addObservableCharacter((Pig) ITpig.next()); 
+    	}
+    	
+    	Iterator<Gravity> itBH = gravities.iterator();
+    	itBH.next();
+    	
+    	while(itBH.hasNext()) {
+    		
+    		this.collisionManager.addObservableCharacter((BlackHole) itBH.next()); 
     	}
     	
     	this.collisionManager.addObservableCharacter((Bird) this.currentBird);
@@ -390,6 +428,17 @@ public class Game extends JPanel implements Runnable, MouseListener, MouseMotion
     		g.drawImage(p.getImage(), (int) p.getPositionX() , (int) p.getPositionY() - 20, this);
 		}
         
+    	
+    	 // black hole
+    	Iterator<Gravity> ITBH = gravities.iterator();
+    	ITBH.next();
+    	
+    	while(ITBH.hasNext()) {
+    		
+    		BlackHole bH = (BlackHole) ITBH.next();
+    		g.drawImage(bH.getImage(), (int) bH.getPositionX()-100, (int) bH.getPositionY()-100, this);
+		}
+    	
         // g.fillOval(, (int) currentPig.getPositionY() - 20, 40, 40);
 
         // messages

@@ -1,19 +1,21 @@
 package en.oiseauxpascontents.characters;
 
+
 public class BlackHole extends Gravity{
 
 	@Override
 	public void actOn(GameCharacter token) {
 		double distance = distance(token.getPositionX(), token.getPositionY(),this.getPositionX(), this.getPositionY());
-		if(distance < 100){
-			token.setVelocityX(token.getVelocityX()+this.getPositionX());
-			token.setVelocityY(token.getVelocityY()+this.getPositionY());
+		if(distance < 150){
+			token.setVelocityX(token.getVelocityX()+(this.getPositionX()/200));
+			token.setVelocityY(token.getVelocityY()+(this.getPositionY()/200));
 		}
 		
 	}
 
 	@Override
 	public void getCollision(GameCharacter gameCharacter) {
+		System.out.println("test");
 		gameCharacter.setVelocityX(0);
 		gameCharacter.setVelocityY(0);
 		gameCharacter.setImage(null);

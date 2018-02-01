@@ -32,9 +32,11 @@ public class Level {
 		this.nbBlackHoles = nbBlackHoles;
 		this.gravities= new ArrayList<Gravity>();
 		this.gravities.add(new ClassicGravity(gravity));
-		this.gravities.addAll(getBlackHoles());
 		
 		CharactersFactory.getInstance().loadPrototypes();
+		this.gravities.addAll(getBlackHoles());
+		
+		
 	}
 
 	/**
